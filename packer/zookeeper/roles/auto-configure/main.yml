@@ -2,6 +2,7 @@
   block:
 
     - name: Copy auto-configure script
+      become: zk
       ansible.builtin.copy:
         src: auto-configure-zookeeper.py
         dest: /opt/zookeeper/bin
