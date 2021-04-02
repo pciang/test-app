@@ -40,7 +40,7 @@
 
         - name: Download Zookeeper
           get_url:
-            url: https://www.apache.org/dyn/closer.lua/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0-bin.tar.gz
+            url: https://apachemirror.sg.wuchna.com/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0-bin.tar.gz
             dest: /tmp/zookeeper.tar.gz
             mode: '0755'
 
