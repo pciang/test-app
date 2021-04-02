@@ -69,6 +69,13 @@ build {
     "source.amazon-ebs.image",
   ]
 
+  provisioner "shell" {
+    inline = [
+      "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done",
+      "sudo dpkg-reconfigure -plow unattended-upgrades",
+    ]
+  }
+
   provisioner "ansible" {
     playbook_file = "./packer/${var.service}/build.yml"
   }
