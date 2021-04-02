@@ -34,6 +34,7 @@
         group: zk
         comment: Zookeeper
         create_home: yes
+        shell: /bin/bash
 
     - name: Download Zookeeper
       block:
