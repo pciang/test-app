@@ -70,7 +70,7 @@ build {
   ]
 
   provisioner "ansible" {
-    playbook_file = "./packer/${var.service}/ansible/build.yml"
+    playbook_file = "./packer/${var.service}/build.yml"
   }
 
   post-processor "manifest" {
