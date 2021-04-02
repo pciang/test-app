@@ -7,7 +7,7 @@
       block:
 
       - name: Update apt cache and install openjdk-8-jre-headless
-        become: true
+        become: yes
         apt:
           name: openjdk-8-jre-headless
           state: present

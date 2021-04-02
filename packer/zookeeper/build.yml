@@ -48,10 +48,15 @@
           ansible.builtin.unarchive:
             src: /tmp/zookeeper.tar.gz
             dest: /opt
+            remote_src: yes
+
+        - name: Change ownership to zk
+          ansible.builtin.file:
+            path: /opt/zookeeper
             owner: zk
             group: zk
+            recurse: yes
             mode: '0755'
-            remote_src: yes
 
         - name: Mkdir dataDir and logging directory
           become: yes
@@ -65,15 +70,21 @@
             - /var/opt/zookeeper
             - /var/log/zookeeper
 
+    - name: Install python3-pip and python3-setuptools
+      become: yes
+      apt:
+        pkg:
+          - python3-pip
+          - python3-setuptools
+
+    - name: Upgrade pip3
+      pip:
+        name: pip
+        state: latest
+        executable: pip3
+
     - name: Setup auto-configuration
       block:
-
-        - name: Install python3-pip and python3-setuptools
-          become: yes
-          apt:
-            pkg:
-              - python3-pip
-              - python3-setuptools
 
         - name: Install ansible-base, requests and boto3
           pip:
