@@ -50,6 +50,11 @@
             dest: /opt
             remote_src: yes
 
+        - name: Rename Zookeeper directory
+          become: yes
+          command:
+            cmd: mv /opt/apache-zookeeper-3.7.0-bin /opt/zookeeper
+
         - name: Change ownership to zk
           become: yes
           ansible.builtin.file:
