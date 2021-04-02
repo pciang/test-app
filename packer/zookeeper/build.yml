@@ -26,15 +26,13 @@
       become: yes
       ansible.builtin.group:
         name: zk
-        state: present
 
     - name: Create user "zk"
       become: yes
-      ansible.builtin.group:
+      ansible.builtin.user:
         name: zk
         comment: Zookeeper
         group: zk
-        state: present
 
     - name: Download Zookeeper
       become_user: zk
