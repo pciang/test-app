@@ -51,10 +51,12 @@
             remote_src: yes
 
         - name: Change ownership to zk
+          become: yes
           ansible.builtin.file:
             path: /opt/zookeeper
             owner: zk
             group: zk
+            state: directory
             recurse: yes
             mode: '0755'
 
