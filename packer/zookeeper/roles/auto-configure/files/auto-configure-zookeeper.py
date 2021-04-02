@@ -34,7 +34,7 @@ class AutoConfigure:
     )
 
   def get_config_from_param_store(self) -> str:
-    return self.ssm_client.get_parameter('/zookeeper/config')['Value']
+    return self.ssm_client.get_parameter(Name='/zookeeper/config')['Value']
 
   def write_zk_server_id(self):
     with open(self.zk_server_id_path, mode='w') as zk_server_id_file:
