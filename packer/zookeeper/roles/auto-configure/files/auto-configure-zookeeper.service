@@ -9,8 +9,8 @@ Group=zk
 Environment="ZOO_LOG_DIR=/var/log/zookeeper"
 Environment="ZOO_LOG4J_PROP=INFO,ROLLINGFILE"
 WorkingDirectory=/opt/zookeeper
-ExecStart=/opt/zookeeper/bin/auto-configure-zookeeper.py
-ExecStart=/opt/zookeeper/bin/zkServer.sh start
+ExecStart=/opt/zookeeper/bin/auto-configure-zookeeper.py \
+  && /opt/zookeeper/bin/zkServer.sh start
 Restart=on-failure
 RestartSec=60s
 
