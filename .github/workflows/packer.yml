@@ -23,6 +23,8 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   packer:
+    name: Build AMI
+  
     # The type of runner that the job will run on
     runs-on: ubuntu-18.04
 
@@ -39,5 +41,5 @@ jobs:
       - name: Use my godlike Docker image
         uses: docker://goodman25/test-image:latest
 
-      - name: Validate Packer file for ${matrix.service}
-        run: packer validate -var 'service=${matrix.service}' packer/image.pkr.hcl
+      - name: Validate Packer file for ${{matrix.service}}
+        run: packer validate -var 'service=${{matrix.service}}' packer/image.pkr.hcl
