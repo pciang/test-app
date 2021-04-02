@@ -86,6 +86,7 @@
           - python3-setuptools
 
     - name: Upgrade pip3
+      become: yes
       become_user: zk
       pip:
         name: pip
@@ -96,6 +97,7 @@
       block:
 
         - name: Install ansible-base, requests and boto3
+          become: yes
           become_user: zk
           pip:
             name:
