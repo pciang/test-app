@@ -2,7 +2,7 @@
 
 name: Build AMI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -10,6 +10,7 @@ on:
       - master
     paths:
       - packer/**
+
   pull_request:
     branches:
       - master
@@ -21,10 +22,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  packer:
-    name: Build AMI
-  
+  # This workflow contains a single job called "validate"
+  validate:
+    name: Validate Packer
+
     # The type of runner that the job will run on
     runs-on: ubuntu-18.04
 
@@ -43,3 +44,24 @@ jobs:
 
       - name: Validate Packer file for ${{matrix.service}}
         run: packer validate -var 'service=${{matrix.service}}' packer/image.pkr.hcl
+
+  build:
+    name: Build AMI
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        service:
+          - kafka
+          - zookeeper
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Use my godlike Docker image
+        uses: docker://goodman25/test-image:latest
+
+      - name: Build AMI for ${{matrix.service}}
+        run: echo TODO

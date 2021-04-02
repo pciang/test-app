@@ -10,6 +10,6 @@ COPY --from=0 /bin/terraform /bin/terraform
 COPY --from=1 /bin/packer /bin/packer
 
 RUN pip3 install --no-cache-dir --upgrade pip && \
-  pip3 install --no-cache-dir boto3
+  pip3 install --no-cache-dir ansible-base boto3 requests
 
 CMD ["/bin/bash"]
