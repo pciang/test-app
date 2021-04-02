@@ -10,10 +10,12 @@
         mode: '0755'
 
     - name: Copy auto-configure systemd unit file
+      become: yes
       ansible.builtin.copy:
         src: auto-configure-zookeeper.service
         dest: /etc/systemd/system/auto-configure-zookeeper.service
 
     - name: Systemd to re-read config
+      become: yes
       ansible.builtin.systemd:
         daemon_reload: yes

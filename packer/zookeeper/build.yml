@@ -7,7 +7,7 @@
       block:
 
         - name: Update apt cache and install openjdk-8-jre-headless
-          become: true
+          become: yes
           apt:
             name: openjdk-8-jre-headless
             state: present
@@ -23,11 +23,13 @@
             msg: "{{ java_version.stderr }}"
 
     - name: Create group "zk"
+      become: yes
       ansible.builtin.group:
         name: zk
         state: present
 
     - name: Create user "zk"
+      become: yes
       ansible.builtin.group:
         name: zk
         comment: Zookeeper
@@ -65,6 +67,7 @@
       block:
 
         - name: Install python3-pip and python3-setuptools
+          become: yes
           apt:
             pkg:
               - python3-pip
