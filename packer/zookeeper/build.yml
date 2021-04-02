@@ -31,8 +31,9 @@
       become: yes
       ansible.builtin.user:
         name: zk
-        comment: Zookeeper
         group: zk
+        comment: Zookeeper
+        create_home: yes
 
     - name: Download Zookeeper
       block:
@@ -85,6 +86,7 @@
           - python3-setuptools
 
     - name: Upgrade pip3
+      become_user: zk
       pip:
         name: pip
         state: latest
@@ -94,6 +96,7 @@
       block:
 
         - name: Install ansible-base, requests and boto3
+          become_user: zk
           pip:
             name:
               - ansible-base
