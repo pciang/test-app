@@ -1,0 +1,83 @@
+---
+- name: Build Zookeeper AMI
+  hosts: default
+
+  tasks:
+    - name: Install Java 8
+      block:
+
+        - name: Update apt cache and install openjdk-8-jre-headless
+          become: true
+          apt:
+            name: openjdk-8-jre-headless
+            state: present
+            update_cache: yes
+
+        - name: Get Java version
+          ansible.builtin.command:
+            cmd: java -version
+          register: java_version
+
+        - name: Show Java version
+          debug:
+            msg: "{{ java_version.stderr }}"
+
+    - name: Create group "zk"
+      ansible.builtin.group:
+        name: zk
+        state: present
+
+    - name: Create user "zk"
+      ansible.builtin.group:
+        name: zk
+        comment: Zookeeper
+        group: zk
+        state: present
+
+    - name: Download Zookeeper
+      become_user: zk
+      block:
+
+        - name: Download Zookeeper
+          get_url:
+            url: https://www.apache.org/dyn/closer.lua/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0-bin.tar.gz
+            dest: /tmp/zookeeper.tar.gz
+            mode: '0755'
+
+        - name: Unarchive Zookeeper
+          ansible.builtin.unarchive:
+            src: /tmp/zookeeper.tar.gz
+            dest: /opt
+            remote_src: yes
+
+        - name: Mkdir dataDir and logging directory
+          ansible.builtin.file:
+            path: "{{ item }}"
+            owner: zk
+            group: zk
+            state: directory
+            mode: '0755'
+            loop:
+              - /var/opt/zookeeper
+              - /var/log/zookeeper
+
+    - name: Setup auto-configuration
+      block:
+
+        - name: Install python3-pip and python3-setuptools
+          apt:
+            pkg:
+              - python3-pip
+              - python3-setuptools
+
+        - name: Install ansible-base, requests and boto3
+          pip:
+            name:
+              - ansible-base
+              - requests
+              - boto3
+            executable: pip3
+
+        - name: Auto-configure Zookeeper
+          include_role:
+            name: auto-configure

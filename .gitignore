@@ -7,3 +7,9 @@
 
 # Packer manifest
 *.manifest.json
+
+# Python3 venv
+/venv
+
+# Editor
+/.vscode

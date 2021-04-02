@@ -9,10 +9,14 @@ data "amazon-ami" "canonical-ubuntu" {
   region      = "ap-southeast-1"
 }
 
-source "amazon-ebs" "kafka" {
+variable "service" {
+  type = string
+}
+
+source "amazon-ebs" "image" {
   # AMI Configuration
-  ami_name                = "peter-kafka-{{ timestamp }}"
-  ami_description         = "Contains Java 8 and Kafka"
+  ami_name                = "peter-${var.service}-{{ timestamp }}"
+  ami_description         = "AMI with necessary installation for ${var.service}"
   ami_virtualization_type = "hvm"
   ami_users = [
     "406178986850",
@@ -22,7 +26,7 @@ source "amazon-ebs" "kafka" {
   ]
   tag {
     key   = "Name"
-    value = "peter-kafka"
+    value = "peter-${var.service}"
   }
 
   # Access Configuration
@@ -62,14 +66,14 @@ source "amazon-ebs" "kafka" {
 
 build {
   sources = [
-    "source.amazon-ebs.kafka",
+    "source.amazon-ebs.image",
   ]
 
   provisioner "ansible" {
-    playbook_file = "./packer/kafka/ansible/build.yml"
+    playbook_file = "./packer/${var.service}/ansible/build.yml"
   }
 
   post-processor "manifest" {
-    output = "kafka.manifest.json"
+    output = "${var.service}.manifest.json"
   }
 }

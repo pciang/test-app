@@ -1,0 +1,23 @@
+---
+- name: Build Kafka AMI
+  hosts: default
+
+  tasks:
+    - name: Install Java 8
+      block:
+
+      - name: Update apt cache and install openjdk-8-jre-headless
+        become: true
+        apt:
+          name: openjdk-8-jre-headless
+          state: present
+          update_cache: yes
+
+      - name: Get Java version
+        ansible.builtin.command:
+          cmd: java -version
+        register: java_version
+
+      - name: Show Java version
+        debug:
+          msg: "{{ java_version.stderr }}"

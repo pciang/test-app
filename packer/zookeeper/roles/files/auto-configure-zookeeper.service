@@ -1,0 +1,14 @@
+[Unit]
+Description=Auto-configure Zookeeper
+After=network.target
+
+[Service]
+Type=oneshot
+User=zk
+WorkingDirectory=/opt/zookeeper
+ExecStart=bin/auto-configure-zookeeper.py
+ExecStart=bin/zkServer.sh start
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
