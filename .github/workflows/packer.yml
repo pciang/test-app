@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Authenticate through MFA
-        run: scripts/aws-mfa.py --duration 1800 --credentials-path ./aws-credentials github-actions ${{github.event.inputs.token_code}}
+        run: scripts/aws-mfa.py --overwrite default --duration 1800 --credentials-path ./aws-credentials github-actions ${{github.event.inputs.token_code}}
 
       - name: Remember credentials
         uses: actions/upload-artifact@v2
@@ -40,9 +40,6 @@ jobs:
           name: ${{github.run_id}}
           path: aws-credentials
           retention-days: 1
-
-      - name: Peek identity
-        run: python3 -c 'import json; import boto3; print(json.dumps(boto3.client("sts").get_caller_identity()))' | python3 -m json.tool
 
   validate:
     name: Validate Packer
@@ -71,6 +68,9 @@ jobs:
 
       - name: Validate Packer file for ${{matrix.service}}
         run: packer validate -var 'service=${{matrix.service}}' packer/image.pkr.hcl
+
+      - name: Peek identity
+        run: python3 -c 'import json; import boto3; print(json.dumps(boto3.client("sts").get_caller_identity()))' | python3 -m json.tool
 
   build:
     name: Build AMI
