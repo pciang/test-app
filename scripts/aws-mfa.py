@@ -35,7 +35,11 @@ def main() -> int:
 
   profile_name: str = args.source_profile
 
-  my_session = boto3.session.Session(profile_name=profile_name)
+  session_kwargs = {}
+  if profile_name is not None:
+    session_kwargs['profile_name'] = profile_name
+
+  my_session = boto3.session.Session(**session_kwargs)
   my_credentials = my_session.get_credentials()
   sts_client = boto3.client('sts',
     aws_access_key_id=my_credentials.access_key,
