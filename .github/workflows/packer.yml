@@ -19,7 +19,7 @@ jobs:
   mfa:
     name: Authenticate to AWS through MFA
 
-    runs-on: ubuntu:18.04
+    runs-on: ubuntu-18.04
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
