@@ -41,9 +41,6 @@ jobs:
           path: aws-credentials
           retention-days: 1
 
-      - name: Peek identity
-        run: python3 -c 'import json; import boto3; print(json.dumps(boto3.client("sts").get_caller_identity()))' | python3 -m json.tool
-
   validate:
     name: Validate Packer
 
@@ -68,6 +65,12 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: ${{github.run_id}}
+
+      - name: Debugging
+        run: |
+          ls
+          less aws-credentials
+          python3 -c 'import json; import boto3; print(json.dumps(boto3.client("sts").get_caller_identity()))' | python3 -m json.tool
 
       - name: Validate Packer file for ${{matrix.service}}
         run: packer validate -var 'service=${{matrix.service}}' packer/image.pkr.hcl
