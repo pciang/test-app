@@ -26,6 +26,11 @@ def main() -> int:
   )
   argparser.add_argument('username', type=str)
   argparser.add_argument('token_code', type=str)
+  argparser.add_argument('--credentials-path',
+    help='Writes the temporary credential into this file',
+    type=str,
+    default='~/.aws/credentials',
+  )
   args = argparser.parse_args()
 
   profile_name: str = args.source_profile
@@ -54,7 +59,7 @@ def main() -> int:
     TokenCode=token_code,
   )
 
-  credentials_path = os.path.expanduser('~/.aws/credentials')
+  credentials_path: str = os.path.expanduser(args.credentials_path)
 
   config = configparser.ConfigParser()
   config.read(credentials_path)
@@ -70,7 +75,8 @@ def main() -> int:
   with open(credentials_path, 'w') as credentials_file:
     config.write(credentials_file)
 
-  print(f'Authenticated successfully! New profile is written to {overwritten_profile_name:s}.')
+  print('Authenticated successfully!')
+  print(f'New credentials is written into this profile {overwritten_profile_name:s} in this file {credentials_path:s}.')
 
   return 0
 
