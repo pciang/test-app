@@ -76,6 +76,7 @@ build {
   }
 
   provisioner "ansible" {
+    user          = "ubuntu"
     playbook_file = "./packer/${var.service}/build.yml"
   }
 
