@@ -64,7 +64,12 @@ def main() -> int:
   config = configparser.ConfigParser()
   config.read(credentials_path)
 
-  overwritten_profile_name: str = args.overwrite or f'{profile_name:s}-mfa'
+  if args.overwrite is not None:
+    overwritten_profile_name: str = args.overwrite
+  elif profile_name is not None:
+    overwritten_profile_name: str = f'{profile_name:s}-mfa'
+  else:
+    overwritten_profile_name = 'default-mfa'
 
   config[overwritten_profile_name] = {
       'aws_access_key_id': response['Credentials']['AccessKeyId'],
