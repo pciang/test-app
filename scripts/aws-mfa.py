@@ -17,7 +17,7 @@ def main() -> int:
   argparser.add_argument('--source-profile',
     help='Select a specific profile to do MFA',
     type=str,
-    default='default',
+    default=None,
   )
   argparser.add_argument('--duration',
     help='How long the session lasts in seconds',

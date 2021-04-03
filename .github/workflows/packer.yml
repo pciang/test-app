@@ -21,12 +21,11 @@ jobs:
 
     runs-on: ubuntu-18.04
 
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    container:
+      image: docker://goodman25/test-image:latest
 
-      - name: Use my godlike Docker image
-        uses: docker://goodman25/test-image:latest
+    steps:
+      - uses: actions/checkout@v2
 
       - name: Authenticate through MFA
         run: scripts/aws-mfa.py --duration 1800 --credentials-path ./aws-credentials github-actions ${{github.event.inputs.token_code}}
@@ -39,17 +38,18 @@ jobs:
           retention-days: 1
 
       - name: Peek identity
-        run: aws sts get-caller-identity
+        run: python3 -c 'import json; import boto3; print(json.dumps(boto3.client("sts").get_caller_identity()))' | python3 -m json.tool
 
-  # This workflow contains a single job called "validate"
   validate:
     name: Validate Packer
 
     needs:
       - mfa
 
-    # The type of runner that the job will run on
     runs-on: ubuntu-18.04
+
+    container:
+      image: docker://goodman25/test-image:latest
 
     strategy:
       matrix:
@@ -64,9 +64,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: ${{github.run_id}}
-
-      - name: Use my godlike Docker image
-        uses: docker://goodman25/test-image:latest
 
       - name: Validate Packer file for ${{matrix.service}}
         run: packer validate -var 'service=${{matrix.service}}' packer/image.pkr.hcl
@@ -79,6 +76,9 @@ jobs:
 
     runs-on: ubuntu-18.04
 
+    container:
+      image: docker://goodman25/test-image:latest
+
     strategy:
       matrix:
         service:
@@ -86,15 +86,11 @@ jobs:
           - zookeeper
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - uses: actions/download-artifact@v2
         with:
           name: ${{github.run_id}}
-
-      - name: Use my godlike Docker image
-        uses: docker://goodman25/test-image:latest
 
       - name: Build AMI for ${{matrix.service}}
         run: echo TODO
