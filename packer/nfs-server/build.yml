@@ -1,0 +1,23 @@
+---
+- name: Build Zookeeper AMI
+  hosts: default
+
+  tasks:
+    - name: Install nfs-kernel-server
+      become: yes
+      apt:
+        name: nfs-kernel-server
+        update_cache: yes
+
+    - name: Setup auto-configuration
+      block:
+
+        - name: Install ansible-base, requests and boto3
+          become: yes
+          pip:
+            name: boto3
+            executable: pip3
+
+        - name: Auto-configure NFS server
+          include_role:
+            name: auto-configure

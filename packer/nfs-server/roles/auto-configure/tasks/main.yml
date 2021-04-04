@@ -1,0 +1,24 @@
+---
+- name: Auto-configure NFS server
+  become: yes
+  block:
+
+    - name: Copy auto-configure script
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /usr/local/bin/
+        mode: '0755'
+      loop:
+        - auto-configure-nfs-server.py
+        - stop-nfs-server.py
+
+    - name: Copy auto-configure systemd unit file
+      ansible.builtin.copy:
+        src: auto-configure-nfs-server.service
+        dest: /etc/systemd/system/
+
+    - name: Systemd to re-read config
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        name: auto-configure-nfs-server
+        enabled: yes
