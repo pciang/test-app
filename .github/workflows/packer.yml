@@ -53,6 +53,7 @@ jobs:
       image: docker://goodman25/test-image:latest
 
     strategy:
+      fail-fast: false
       matrix:
         service:
           - zookeeper
@@ -84,6 +85,7 @@ jobs:
       image: docker://goodman25/test-image:latest
 
     strategy:
+      fail-fast: false
       matrix:
         service:
           - zookeeper

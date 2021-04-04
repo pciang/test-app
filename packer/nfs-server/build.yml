@@ -3,21 +3,30 @@
   hosts: default
 
   tasks:
-    - name: Install nfs-kernel-server
+    - name: Install nfs-kernel-server and some utilities
       become: yes
       apt:
-        name: nfs-kernel-server
+        pkg:
+          - nfs-kernel-server
+          - python3-pip
+          - python3-setuptools
         update_cache: yes
 
-    - name: Setup auto-configuration
+    - name: Upgrade pip3 and install boto3
+      become: yes
       block:
 
-        - name: Install ansible-base, requests and boto3
-          become: yes
+        - name: Upgrade pip3
+          pip:
+            name: pip
+            state: latest
+            executable: pip3
+
+        - name: Install boto3
           pip:
             name: boto3
             executable: pip3
 
-        - name: Auto-configure NFS server
-          include_role:
-            name: auto-configure
+    - name: Auto-configure NFS server
+      include_role:
+        name: auto-configure
