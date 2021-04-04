@@ -1,14 +1,14 @@
 [Unit]
 Description=Auto-configure NFS server
 After=network.target
-Before=nfs-kernel-server.service
 
 [Service]
-Type=simple
+Type=oneshot
 User=root
 Group=root
 ExecStart=/usr/local/bin/auto-configure-nfs-server.py
 ExecStop=/usr/local/bin/stop-nfs-server.py
+RemainAfterExit=true
 
 [Install]
 WantedBy=multi-user.target
