@@ -55,7 +55,6 @@ jobs:
     strategy:
       matrix:
         service:
-          - kafka
           - zookeeper
 
     steps:
@@ -86,7 +85,6 @@ jobs:
     strategy:
       matrix:
         service:
-          - kafka
           - zookeeper
 
     steps:
