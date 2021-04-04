@@ -1,6 +1,7 @@
 [Unit]
 Description=Auto-configure NFS server
 After=network.target
+Before=nfs-kernel-server.service
 
 [Service]
 Type=oneshot
