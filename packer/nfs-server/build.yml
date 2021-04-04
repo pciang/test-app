@@ -1,5 +1,5 @@
 ---
-- name: Build Zookeeper AMI
+- name: Build NFS server AMI
   hosts: default
 
   tasks:
