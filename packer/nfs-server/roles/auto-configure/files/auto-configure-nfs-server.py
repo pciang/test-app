@@ -30,7 +30,7 @@ class AutoConfigure:
     return config.strip().split('\n')
 
   def is_blk(self, device: str) -> bool:
-    return stat.S_ISBLK(os.stat(device))
+    return stat.S_ISBLK(os.stat(device).st_mode)
 
   def is_ext4(self, device: str) -> bool:
     file_stdout = subprocess \
