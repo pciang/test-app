@@ -67,7 +67,7 @@
           ansible.builtin.file:
             path: "{{ item }}"
             state: directory
-            user: elasticsearch
+            owner: elasticsearch
             group: elasticsearch
             mode: '0755'
             recurse: yes
