@@ -60,9 +60,9 @@
         path: "{{ item }}"
         state: directory
         mode: '0755'
-        loop:
-          - /var/opt/elasticsearch
-          - /var/log/elasticsearch
+      loop:
+        - /var/opt/elasticsearch
+        - /var/log/elasticsearch
 
     - name: Auto-configure Elasticsearch
       include_role:
