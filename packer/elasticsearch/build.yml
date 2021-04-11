@@ -3,66 +3,78 @@
   hosts: default
 
   tasks:
-    - name: Install pip3 and setuptools
-      become: yes
-      apt:
-        pkg:
-          - python3-pip
-          - python3-setuptools
-        update_cache: yes
+    - become: yes
+      block:
+        - name: Create group "elasticsearch"
+          ansible.builtin.group:
+            name: elasticsearch
 
-    - name: Upgrade pip3
-      become: yes
-      ansible.builtin.pip:
-        name: pip
-        state: latest
-        extra_args: --no-cache-dir
-        executable: pip3
+        - name: Create user "elasticsearch"
+          ansible.builtin.user:
+            name: elasticsearch
+            group: elasticsearch
+            comment: elasticsearch
+            create_home: yes
+            shell: /bin/bash
 
-    - name: Install boto3 and requests
-      become: yes
-      ansible.builtin.pip:
-        name:
-          - boto3
-          - requests
-        extra_args: --no-cache-dir
-        executable: pip3
+        - name: Install pip3 and setuptools
+          apt:
+            pkg:
+              - python3-pip
+              - python3-setuptools
+            update_cache: yes
 
-    - name: Download Elasticsearch
-      get_url:
-        url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-linux-x86_64.tar.gz
-        dest: /tmp/elasticsearch.tar.gz
-        checksum: sha512:https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-linux-x86_64.tar.gz.sha512
+        - name: Upgrade pip3
+          ansible.builtin.pip:
+            name: pip
+            state: latest
+            extra_args: --no-cache-dir
+            executable: pip3
 
-    - name: Unarchived Elasticsearch
-      become: yes
-      ansible.builtin.unarchive:
-        src: /tmp/elasticsearch.tar.gz
-        dest: /opt
-        remote_src: yes
+        - name: Install boto3 and requests
+          ansible.builtin.pip:
+            name:
+              - boto3
+              - requests
+            extra_args: --no-cache-dir
+            executable: pip3
 
-    - name: Rename Elasticsearch's directory
-      become: yes
-      command:
-        cmd: mv /opt/elasticsearch-{{ elasticsearch_version }} /opt/elasticsearch
+        - name: Download Elasticsearch
+          get_url:
+            url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-linux-x86_64.tar.gz
+            dest: /tmp/elasticsearch.tar.gz
+            checksum: sha512:https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-linux-x86_64.tar.gz.sha512
 
-    - name: Change directory mode
-      become: yes
-      ansible.builtin.file:
-        path: /tmp/elasticsearch
-        state: directory
-        mode: '0755'
-        recurse: yes
+        - name: Unarchived Elasticsearch
+          ansible.builtin.unarchive:
+            src: /tmp/elasticsearch.tar.gz
+            dest: /opt
+            remote_src: yes
 
-    - name: Create directories for data and logs
-      become: yes
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: directory
-        mode: '0755'
-      loop:
-        - /var/opt/elasticsearch
-        - /var/log/elasticsearch
+        - name: Rename Elasticsearch's directory
+          command:
+            cmd: mv /opt/elasticsearch-{{ elasticsearch_version }} /opt/elasticsearch
+
+        - name: Create directories for data and logs
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: directory
+          loop:
+            - /var/opt/elasticsearch
+            - /var/log/elasticsearch
+
+        - name: Change permissions and owner
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: directory
+            user: elasticsearch
+            group: elasticsearch
+            mode: '0755'
+            recurse: yes
+          loop:
+            - /opt/elasticsearch
+            - /var/opt/elasticsearch
+            - /var/log/elasticsearch
 
     - name: Auto-configure Elasticsearch
       include_role:

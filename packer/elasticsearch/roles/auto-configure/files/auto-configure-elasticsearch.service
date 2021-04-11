@@ -4,6 +4,9 @@ After=network.target
 
 [Service]
 Type=forking
+User=elasticsearch
+Group=elasticsearch
+Environment="HOME=/home/elasticsearch"
 Environment="ES_HOME=/opt/elasticsearch"
 WorkingDirectory=/opt/elasticsearch
 ExecStartPre=/usr/local/bin/auto-configure-elasticsearch.py
