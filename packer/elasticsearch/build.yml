@@ -1,0 +1,58 @@
+---
+- name: Bake Elasticsearch AMI
+  hosts: default
+
+  tasks:
+    - name: Install pip3 and setuptools
+      become: yes
+      apt:
+        pkg:
+          - python3-pip
+          - python3-setuptools
+        update_cache: yes
+
+    - name: Upgrade pip3
+      become: yes
+      ansible.builtin.pip:
+        name: pip
+        state: latest
+        extra_args: --system --no-cache-dir
+        executable: pip3
+
+    - name: Install boto3 and requests
+      become: yes
+      ansible.builtin.pip:
+        name:
+          - boto3
+          - requests
+        extra_args: --system --no-cache-dir
+        executable: pip3
+
+    - name: Download Elasticsearch
+      get_url:
+        url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-linux-x86_64.tar.gz
+        dest: /tmp/elasticsearch.tar.gz
+        checksum: sha512:https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-linux-x86_64.tar.gz.sha512
+
+    - name: Unarchived Elasticsearch
+      ansible.builtin.unarchive:
+        src: /tmp/elasticsearch.tar.gz
+        dest: /opt
+        remote_src: yes
+
+    - name: Rename Elasticsearch's directory
+      ansible.builtin.file:
+        src: /tmp/elasticsearch-{{ elasticsearch_version }}
+        dest: /tmp/elasticsearch
+        state: directory
+        mode: '0755'
+        recurse: yes
+
+    - name: Create directories for data and logs
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        loop:
+          - /var/opt/elasticsearch
+          - /var/log/elasticsearch

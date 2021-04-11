@@ -58,6 +58,7 @@ jobs:
         service:
           - zookeeper
           - nfs-server
+          - elasticsearch
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -90,6 +91,7 @@ jobs:
         service:
           - zookeeper
           - nfs-server
+          - elasticsearch
 
     steps:
       - uses: actions/checkout@v2
