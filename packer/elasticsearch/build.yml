@@ -43,9 +43,13 @@
 
     - name: Rename Elasticsearch's directory
       become: yes
+      command:
+        cmd: mv /opt/elasticsearch-{{ elasticsearch_version }} /opt/elasticsearch
+
+    - name: Change directory mode
+      become: yes
       ansible.builtin.file:
-        src: /tmp/elasticsearch-{{ elasticsearch_version }}
-        dest: /tmp/elasticsearch
+        path: /tmp/elasticsearch
         state: directory
         mode: '0755'
         recurse: yes
