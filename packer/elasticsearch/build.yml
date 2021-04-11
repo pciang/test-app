@@ -16,7 +16,7 @@
       ansible.builtin.pip:
         name: pip
         state: latest
-        extra_args: --system --no-cache-dir
+        extra_args: --no-cache-dir
         executable: pip3
 
     - name: Install boto3 and requests
@@ -25,7 +25,7 @@
         name:
           - boto3
           - requests
-        extra_args: --system --no-cache-dir
+        extra_args: --no-cache-dir
         executable: pip3
 
     - name: Download Elasticsearch
