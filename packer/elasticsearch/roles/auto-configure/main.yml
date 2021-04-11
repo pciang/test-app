@@ -1,6 +1,25 @@
 ---
-- name: Copy the template config
-  ansible.builtin.copy:
-    src: elasticsearch.yml
-    dest: /opt/elasticsearch/config/elasticsearch.yml
-    mode: '0644'
+- become: yes
+  block:
+    - name: Copy the template config
+      ansible.builtin.copy:
+        src: elasticsearch.yml
+        dest: /opt/elasticsearch/config/elasticsearch.yml
+        mode: '0644'
+
+    - name: Copy auto-configure script
+      ansible.builtin.copy:
+        src: auto-configure-elasticsearch.py
+        dest: /usr/local/bin
+        mode: '0755'
+
+    - name: Copy auto-configure systemd unit file
+      ansible.builtin.copy:
+        src: auto-configure-elasticsearch.service
+        dest: /etc/systemd/system/auto-configure-elasticsearch.service
+
+    - name: Systemd to re-read config
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        name: auto-configure-elasticsearch
+        enabled: yes

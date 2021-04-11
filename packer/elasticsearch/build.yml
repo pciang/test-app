@@ -35,12 +35,14 @@
         checksum: sha512:https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-linux-x86_64.tar.gz.sha512
 
     - name: Unarchived Elasticsearch
+      become: yes
       ansible.builtin.unarchive:
         src: /tmp/elasticsearch.tar.gz
         dest: /opt
         remote_src: yes
 
     - name: Rename Elasticsearch's directory
+      become: yes
       ansible.builtin.file:
         src: /tmp/elasticsearch-{{ elasticsearch_version }}
         dest: /tmp/elasticsearch
@@ -49,6 +51,7 @@
         recurse: yes
 
     - name: Create directories for data and logs
+      become: yes
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
@@ -56,3 +59,7 @@
         loop:
           - /var/opt/elasticsearch
           - /var/log/elasticsearch
+
+    - name: Auto-configure Elasticsearch
+      include_role:
+        name: auto-configure

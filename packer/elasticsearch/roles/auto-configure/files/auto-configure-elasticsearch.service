@@ -1,0 +1,16 @@
+[Unit]
+Description=Auto-configure Elasticsearch
+After=network.target
+
+[Service]
+Type=forking
+Environment="ES_HOME=/opt/elasticsearch"
+WorkingDirectory=/opt/elasticsearch
+ExecStartPre=/usr/local/bin/auto-configure-elasticsearch.py
+ExecStart=/opt/elasticsearch/bin/elasticsearch -d -p /tmp/elasticsearch-pid
+PIDFile=/tmp/elasticsearch-pid
+Restart=on-failure
+RestartSec=60s
+
+[Install]
+WantedBy=multi-user.target
