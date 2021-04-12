@@ -14,13 +14,13 @@
 #
 # Use a descriptive name for your cluster:
 #
-cluster.name: "{{ cluster_name }}"
+cluster.name: {{ cluster_name }}
 #
 # ------------------------------------ Node ------------------------------------
 #
 # Use a descriptive name for the node:
 #
-node.name: "{{ node_name }}"
+node.name: {{ node_name }}
 #
 # Add custom attributes to the node:
 #
@@ -53,7 +53,7 @@ path.logs: /var/log/elasticsearch
 # By default Elasticsearch is only accessible on localhost. Set a different
 # address here to expose this node on the network:
 #
-network.host: "{{ network_host }}"
+network.host: {{ network_host }}
 #
 # By default Elasticsearch listens for HTTP traffic on the first free port it
 # finds starting at 9200. Set a specific HTTP port here:
@@ -68,7 +68,7 @@ network.host: "{{ network_host }}"
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
 discovery.seed_hosts:
-  - "{{ seed_hostname }}"
+  - {{ seed_hostname }}
 #
 # Bootstrap the cluster using an initial set of master-eligible nodes:
 #

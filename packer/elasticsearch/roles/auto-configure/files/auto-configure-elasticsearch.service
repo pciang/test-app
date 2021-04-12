@@ -12,6 +12,7 @@ WorkingDirectory=/opt/elasticsearch
 ExecStartPre=/usr/local/bin/auto-configure-elasticsearch.py
 ExecStart=/opt/elasticsearch/bin/elasticsearch -d -p /tmp/elasticsearch-pid
 PIDFile=/tmp/elasticsearch-pid
+LimitNOFILE=65536
 Restart=on-failure
 RestartSec=60s
 

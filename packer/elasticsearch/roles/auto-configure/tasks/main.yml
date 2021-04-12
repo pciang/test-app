@@ -3,9 +3,15 @@
   block:
     - name: Copy the template config
       ansible.builtin.copy:
-        src: elasticsearch.yml
-        dest: /opt/elasticsearch/config/elasticsearch.template.yml
+        src: elasticsearch.yml.j2
+        dest: /opt/elasticsearch/config/elasticsearch.yml.j2
         mode: '0644'
+
+    - name: Increase maximum number of memory map areas that a process can use
+      become: yes
+      ansible.posix.sysctl:
+        name: vm.max_map_count
+        value: 262144
 
     - name: Copy auto-configure script
       ansible.builtin.copy:
