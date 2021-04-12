@@ -100,5 +100,14 @@ jobs:
         with:
           name: ${{github.run_id}}
 
+      - name: Install requirements.yml if exists
+        run: |
+          test -f packer/${{matrix.service}}/requirements.yml && \
+            ansible-galaxy collection install \
+            -r packer/${{matrix.service}}/requirements.yml \
+            -p packer/${{matrix.service}}/vendor
+
       - name: Build AMI for ${{matrix.service}}
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ./packer/${{matrix.service}}/vendor
         run: packer build -var 'service=${{matrix.service}}' packer/image.pkr.hcl

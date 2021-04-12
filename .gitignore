@@ -13,3 +13,6 @@
 
 # Editor
 /.vscode
+
+# Installed packages
+/vendor
