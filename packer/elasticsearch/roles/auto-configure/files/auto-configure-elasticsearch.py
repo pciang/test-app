@@ -43,7 +43,7 @@ class AutoConfigure:
     return self.tags['Elasticsearch-Node']
 
   def run(self) -> int:
-    with open('/opt/elasticsearch/config/elasticsearch.yml', mode='r') as template_file:
+    with open('/opt/elasticsearch/config/elasticsearch.template.yml', mode='r') as template_file:
       config_template = jinja2.Template(template_file.read())
 
     with open('/opt/elasticsearch/config/elasticsearch.yml', mode='w') as config_file:
