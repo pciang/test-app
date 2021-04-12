@@ -106,7 +106,7 @@ jobs:
             ansible-galaxy collection install \
               -r packer/${{matrix.service}}/requirements.yml \
               -p packer/${{matrix.service}}/vendor
-          ; fi
+          fi
 
       - name: Build AMI for ${{matrix.service}}
         env:
