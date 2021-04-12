@@ -102,10 +102,11 @@ jobs:
 
       - name: Install requirements.yml if exists
         run: |
-          test -f packer/${{matrix.service}}/requirements.yml && \
+          if [ -f packer/${{matrix.service}}/requirements.yml ]; then
             ansible-galaxy collection install \
-            -r packer/${{matrix.service}}/requirements.yml \
-            -p packer/${{matrix.service}}/vendor
+              -r packer/${{matrix.service}}/requirements.yml \
+              -p packer/${{matrix.service}}/vendor
+          ; fi
 
       - name: Build AMI for ${{matrix.service}}
         env:
