@@ -3,6 +3,8 @@
 import sys
 import functools
 
+from typing import List, Dict
+
 import boto3
 import requests
 import jinja2
@@ -24,7 +26,7 @@ class AutoConfigure:
 
   @property
   @functools.lru_cache(maxsize=1)
-  def tags(self) -> dict:
+  def tags(self) -> Dict[str, str]:
     return dict((tag['Key'], tag['Value']) for tag in self.ec2_client.describe_instances(
         InstanceIds=[
           self.instance_id,
@@ -42,6 +44,11 @@ class AutoConfigure:
   def node_name(self) -> str:
     return self.tags['Elasticsearch-Node']
 
+  @property
+  @functools.lru_cache(maxsize=1)
+  def initial_masters(self) -> List[str]:
+    return self.tags['Elasticsearch-Masters'].split(',')
+
   def run(self) -> int:
     with open('/opt/elasticsearch/config/elasticsearch.yml.j2', mode='r') as template_file:
       config_template = jinja2.Template(template_file.read())
@@ -53,6 +60,7 @@ class AutoConfigure:
           node_name=self.node_name,
           network_host=f'{self.node_name}.internal',
           seed_hostname='elasticsearch.internal',
+          initial_masters=self.initial_masters,
         ),
       )
 

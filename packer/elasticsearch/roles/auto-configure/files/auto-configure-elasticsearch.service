@@ -9,6 +9,7 @@ Group=elasticsearch
 Environment="HOME=/home/elasticsearch"
 Environment="ES_HOME=/opt/elasticsearch"
 WorkingDirectory=/opt/elasticsearch
+ExecStartPre=/bin/sleep 300
 ExecStartPre=/usr/local/bin/auto-configure-elasticsearch.py
 ExecStart=/opt/elasticsearch/bin/elasticsearch -d -p /tmp/elasticsearch-pid
 PIDFile=/tmp/elasticsearch-pid
