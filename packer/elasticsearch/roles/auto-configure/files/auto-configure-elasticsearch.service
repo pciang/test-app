@@ -16,6 +16,7 @@ PIDFile=/tmp/elasticsearch-pid
 LimitNOFILE=65536
 Restart=on-failure
 RestartSec=60s
+TimeoutSec=900
 
 [Install]
 WantedBy=multi-user.target
