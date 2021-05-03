@@ -56,9 +56,11 @@ jobs:
       fail-fast: false
       matrix:
         service:
-          - zookeeper
-          - nfs-server
-          - elasticsearch
+          - k8s-head
+          - k8s-worker
+          # - zookeeper
+          # - nfs-server
+          # - elasticsearch
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -89,9 +91,11 @@ jobs:
       fail-fast: false
       matrix:
         service:
-          - zookeeper
-          - nfs-server
-          - elasticsearch
+          - k8s-head
+          - k8s-worker
+          # - zookeeper
+          # - nfs-server
+          # - elasticsearch
 
     steps:
       - uses: actions/checkout@v2
