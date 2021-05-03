@@ -1,0 +1,33 @@
+---
+- name: Install kubeadm
+  become: yes
+  block:
+    - name: Install apt-transport-https ca-certificates curl
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+        update_cache: yes
+
+    - name: Download the Google Cloud public signing key
+      ansible.builtin.get_url:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+
+    - name: Add the Kubernetes apt repository
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/kubernetes.list
+        mode: '0644'
+        content: |
+          deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
+
+    - name: Install kubeadm
+      ansible.builtin.apt:
+        name: kubeadm
+        update_cache: yes
+
+    - name: Pin kubeadm
+      ansible.builtin.dpkg_selections:
+        name: kubeadm
+        selection: hold

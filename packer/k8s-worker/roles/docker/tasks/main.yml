@@ -1,0 +1,20 @@
+---
+- name: Install docker
+  become: yes
+  block:
+    - name: Install docker.io
+      ansible.builtin.apt:
+        name: docker.io
+        update_cache: yes
+
+    - name: Add the user ubuntu to the group docker
+      ansible.builtin.user:
+        name: ubuntu
+        group: docker
+
+    - name: Change dockerd's cgroupdriver to systemd
+      ansible.builtin.copy:
+        dest: /etc/docker/daemon.json
+        mode: '0644'
+        content: |
+          {"exec-opts":["native.cgroupdriver=systemd"]}

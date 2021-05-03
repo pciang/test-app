@@ -1,0 +1,9 @@
+---
+- name: Bake an AMI for K8s head
+  hosts: default
+  tasks:
+    - include_role:
+        name: '{{ item }}'
+      loop:
+        - docker
+        - kubeadm
