@@ -27,7 +27,16 @@
         name: kubeadm
         update_cache: yes
 
-    - name: Pin kubeadm
+    - name: Pin kubeadm, kubectl, kubelet
       ansible.builtin.dpkg_selections:
-        name: kubeadm
+        name: '{{ item }}'
         selection: hold
+      loop:
+        - kubeadm
+        - kubectl
+        - kubelet
+
+    - name: Load auto-complete for the user ubuntu
+      ansible.builtin.lineinfile:
+        path: /home/ubuntu/.bashrc
+        line: 'source <(kubectl completion bash)'
