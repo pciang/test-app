@@ -10,7 +10,8 @@
     - name: Add the user ubuntu to the group docker
       ansible.builtin.user:
         name: ubuntu
-        group: docker
+        groups:
+          - docker
         append: yes
 
     - name: Change dockerd's cgroupdriver to systemd
