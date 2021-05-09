@@ -11,6 +11,7 @@
       ansible.builtin.user:
         name: ubuntu
         group: docker
+        append: yes
 
     - name: Change dockerd's cgroupdriver to systemd
       ansible.builtin.copy:
