@@ -15,6 +15,6 @@
         src: /tmp/etcd-{{ versions['etcd'] }}-linux-amd64/{{ item }}
         dest: /usr/local/bin/
         remote_src: yes
-        loop:
-          - etcd
-          - etcdctl
+      loop:
+        - etcd
+        - etcdctl
