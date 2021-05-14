@@ -1,5 +1,5 @@
 ---
-- name: Install kubeadm
+- name: Install kubeadm={{ versions['kubeadm'] }}, kubelet={{ versions['kubelet'] }}, kubectl={{ versions['kubectl'] }}
   become: yes
   block:
     - name: Install apt-transport-https ca-certificates curl
@@ -32,9 +32,9 @@
         name: '{{ item }}'
         selection: hold
       loop:
-        - kubeadm
-        - kubectl
-        - kubelet
+        - kubeadm={{ versions['kubeadm'] }}
+        - kubectl={{ versions['kubectl'] }}
+        - kubelet={{ versions['kubelet'] }}
 
     - name: Load auto-complete for the user ubuntu
       ansible.builtin.lineinfile:

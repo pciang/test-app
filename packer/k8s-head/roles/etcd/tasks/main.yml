@@ -1,0 +1,20 @@
+---
+- name: Install etcd={{ versions['etcd'] }}
+  become: yes
+  block:
+    - ansible.builtin.get_url:
+        url: https://github.com/etcd-io/etcd/releases/download/{{ versions['etcd'] }}/etcd-{{ versions['etcd'] }}-linux-amd64.tar.gz
+        dest: /tmp/etcd.tar.gz
+
+    - ansible.builtin.unarchive:
+        src: /tmp/etcd.tar.gz
+        dest: /tmp/
+        remote_src: yes
+
+    - ansible.builtin.copy:
+        src: /tmp/etcd-{{ versions['etcd'] }}-linux-amd64/{{ item }}
+        dest: /usr/local/bin/
+        remote_src: yes
+        loop:
+          - etcd
+          - etcdctl

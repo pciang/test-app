@@ -1,0 +1,3 @@
+---
+versions:
+  etcd: 'v3.4.16'
