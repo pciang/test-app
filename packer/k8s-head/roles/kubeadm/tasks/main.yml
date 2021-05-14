@@ -24,7 +24,7 @@
 
     - name: Install kubeadm
       ansible.builtin.apt:
-        name: kubeadm
+        name: kubeadm={{ versions['kubeadm'] }}
         update_cache: yes
 
     - name: Pin kubeadm, kubectl, kubelet
@@ -32,9 +32,9 @@
         name: '{{ item }}'
         selection: hold
       loop:
-        - kubeadm={{ versions['kubeadm'] }}
-        - kubectl={{ versions['kubectl'] }}
-        - kubelet={{ versions['kubelet'] }}
+        - kubeadm
+        - kubectl
+        - kubelet
 
     - name: Load auto-complete for the user ubuntu
       ansible.builtin.lineinfile:
